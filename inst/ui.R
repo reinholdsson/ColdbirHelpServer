@@ -21,15 +21,15 @@ shinyUI(bootstrapPage(
     custom_css("Coldbir Help Server"),
 
     # Input
-    selectInput("variable", label = "Select variable:", choices = v, selected = NULL, multiple = FALSE),
+    selectInput("variable", label = "", choices = v, selected = NULL, multiple = FALSE),
         
     div(class="row",
-        div(class="span6", 
+        div(class="span9", 
             htmlOutput("docs")
             #htmlOutput("freq_chart")
         ),
         div(class="span5",
-            plotOutput("charts", height = "500px"),
+            plotOutput("charts", height = "300px"),
             #htmlOutput("summary")
             htmlOutput("table")
         )
