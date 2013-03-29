@@ -22,7 +22,7 @@ shinyServer(function(input, output) {
         if(is.factor(x)) {
             freq <- table(x)
             ch$xAxis(categories = names(freq))  # keep names
-            freq <- sort(freq, decreasing = TRUE)
+            freq <- freq
             ch$data(as.integer(freq), type = "bar", name = "N")
             ch$plotOptions(bar = list(groupPadding = 0))
         } else {
@@ -49,19 +49,67 @@ shinyServer(function(input, output) {
         return(ch)
     })
     
-    output$na_chart <- renderChart({
+    output$stat_chart <- renderChart({
+        
         ch <- rHighcharts:::Chart$new()
-        ch$title(text = "Missing values")
-        ch$subtitle(text = "Number of NA's vs Non-NA's")
+        x <- db[input$variable]
+        
+        if (is.factor(x)) {
+            
+            x <- x[!is.na(x)]  # remove na
+            
+            ch$title(text = "Top 5")
+            ch$yAxis(title = list(text = NULL))
+            ch$legend(enabled = FALSE)
+            ch$chart(type = "column")
+            ch$colors("lightgrey")
+            
+            freq <- table(x)
+            ch$xAxis(categories = names(freq))
+            freq <- head(sort(freq, decreasing = TRUE), 5)
+            ch$data(as.integer(freq), name = "N")
+            #ch$plotOptions( = list(groupPadding = 0))
+            
+        } else {
+        
+            ch$title(text = "Summary statistics")
+            ch$yAxis(title = list(text = NULL))
+            ch$legend(enabled = FALSE)
+            ch$chart(type = "column")
+            ch$colors("lightgreen")
+
+            stats <- c(
+                "Min" = min(x, na.rm = TRUE), 
+                "Median" = median(x, na.rm = TRUE), 
+                "Mean" = mean(x, na.rm = TRUE), 
+                "Max" = max(x, na.rm = TRUE)
+                )
+            
+            ch$data(as.double(stats), name = "Value")
+            ch$xAxis(categories = names(stats))
+        }
+
+        return(ch)
+    })
+    
+    output$n_chart <- renderChart({
+        ch <- rHighcharts:::Chart$new()
+        ch$title(text = "Number of observations")
         ch$yAxis(title = list(text = NULL))
         ch$legend(enabled = FALSE)
-        ch$plotOptions(column = list(groupPadding = 0))
+        ch$chart(type = "column")
+        ch$colors("lightblue")
 
         x <- db[input$variable]
-        freq <- c("NA" = length(x[is.na(x)]), "Non-NA" = length(x[!is.na(x)]))
-        
-        ch$data(as.integer(freq), type = "column")
-        ch$xAxis(categories = names(freq))  # keep names
+
+        stats <- c(
+            "NA" = length(x[is.na(x)]), 
+            "Non-NA" = length(x[!is.na(x)]), 
+            "N" = length(x)
+        )
+
+        ch$data(as.integer(stats), name = "Value")
+        ch$xAxis(categories = names(stats))  # keep names
 
         return(ch)
     })
