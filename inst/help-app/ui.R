@@ -1,3 +1,5 @@
+require(rHighcharts)
+
 # Connect to database
 db <- cdb(.help_args$path, type = "f")
 
@@ -6,19 +8,25 @@ list_vars <- vars(db)
 list_vars <- setNames(as.list(list_vars), list_vars)
 
 # Interface
-shinyUI(pageWithSidebar(
+shinyUI(bootstrapPage(
     
-    headerPanel(""),
+    #headerPanel(""),
     
-    sidebarPanel(
-        radioButtons(inputId = "variable",
+    #sidebarPanel(
+        selectInput(inputId = "variable",
             label = "",
-            choices = list_vars)
-    ),
+            choices = list_vars),
+    #),
     
-    mainPanel(
+    #mainPanel(
+        chart_js(),
         htmlOutput("docs"),
-        plotOutput("plot"),
-        htmlOutput("summary")
-    )
+        htmlOutput("summary"),
+        div(class="span6", htmlOutput("freq_chart")),
+        div(class="span6", htmlOutput("na_chart"))
+        #htmlOutput("freq_chart"),
+        #htmlOutput("na_chart"),
+        
+        
+    #)
 ))
