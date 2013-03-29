@@ -4,7 +4,7 @@ require(rHighcharts)
 db <- cdb(.help_args$path, type = "f")
 
 # Fetch all variables
-v <- vars(db)
+v <- get_vars(db)
 
 col <- "title"  # title name in documentation
 v_names <- sapply(v, function(x) {
@@ -17,7 +17,11 @@ v_names <- sapply(v, function(x) {
     return(title)
 })
 
-v <- setNames(as.list(v), v_names)
+# Choices for selectInput input.variable
+sel_input_v <- setNames(as.list(v), v_names)
 
-#sel_choices <- expand.grid(LETTERS,letters)
-#sel_choices <- paste(sel_choices[,1],sel_choices[,2], sep="-")
+# Dims
+d <- sapply(v, function(x) {
+    get_dims(db, x)
+})
+# d[["dim1"]][[2]]

@@ -21,17 +21,22 @@ shinyUI(bootstrapPage(
     custom_css("Coldbir Help Server"),
 
     # Input
-    selectInput("variable", label = "", choices = v, selected = NULL, multiple = FALSE),
-        
+    selectInput("variable", label = "", choices = sel_input_v, selected = NULL, multiple = FALSE),
+    
     div(class="row",
-        div(class="span9", 
+        div(class="span2", 
+            uiOutput("dims")
+        ),
+        div(class="span8", 
             htmlOutput("docs")
-            #htmlOutput("freq_chart")
         ),
         div(class="span5",
-            plotOutput("charts", height = "300px"),
-            #htmlOutput("summary")
-            htmlOutput("table")
+            
+            conditionalPanel(
+                condition = "input.dims > 0",
+                plotOutput("charts", height = "300px"),
+                htmlOutput("table")
+            )
         )
     )
 ))

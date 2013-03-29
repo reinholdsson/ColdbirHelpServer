@@ -9,7 +9,12 @@ Description: ...
 License: AGPLv3
 Depends:
     Coldbir,
-    shiny
+    shiny,
+    markdown,
+    data.table,
+    ggplot2,
+    ggthemes,
+    googleVis
 Collate:
     'cdb-class.r'
     'ColdbirHelpServer.r'

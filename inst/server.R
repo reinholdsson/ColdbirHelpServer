@@ -1,25 +1,55 @@
 require(markdown)
-require(hwriter)
 require(data.table)
 require(ggplot2)
-require(gridExtra)
 require(ggthemes)
 require(googleVis)
 
 shinyServer(function(input, output) {
     
+    variable <- reactive({
+
+        if(is.null(input$dims)) {
+            i <- 1
+        } else {
+            i <- as.integer(input$dims)
+        }
+        
+        sel <- d[[input$variable]][[i]]
+        
+        db[input$variable, sel]
+    })
+    
+    output$dims <- renderUI({
+        
+        # If missing input, return to avoid error later in function
+        if(is.null(input$variable))
+            return()
+        
+        # Get available dims
+        dims <- get_dims(db, input$variable)
+        
+        # Prepare choices (index number)
+        index <- 1:length(dims)
+        names(index) <- sapply(dims, function(x) { paste(x, collapse = "/") })
+        names(index)[names(index) == ""] <- "None"
+
+        radioButtons("dims", label = "Dimensions", choices = index)
+    })
+    
     output$table <- renderGvis({
-        x <- db[input$variable]
+        x <- variable()
         
         if (is.factor(x)) {
             x <- summary(x)
             x <- data.frame("Variable" = names(x), "N" = x)
         } else {
             stats <- c(
+                "N" = length(x),
                 "Min" = min(x, na.rm = TRUE), 
                 "Median" = median(x, na.rm = TRUE), 
                 "Mean" = mean(x, na.rm = TRUE), 
-                "Max" = max(x, na.rm = TRUE)
+                "Max" = max(x, na.rm = TRUE),
+                "Sd" = sd(x, na.rm = TRUE)
             )
             x <- data.frame("Measure" = names(stats), "Value" = stats)
         }
@@ -27,8 +57,8 @@ shinyServer(function(input, output) {
     })
     
     output$charts <- renderPlot({
-        
-        x <- db[input$variable]
+
+        x <- variable()
 
         if (is.factor(x)) {
             x <- table(x)
@@ -52,30 +82,8 @@ shinyServer(function(input, output) {
         print(p)
     })
     
-#     output$freq <- renderPlot({
-#         hist(db[input$variable])
-#     })    
-    
     output$docs <- renderText({
         markdown::markdownToHTML(text = list_to_md(get_doc(db, input$variable)), fragment.only = TRUE)
     })
-    
-    output$summary <- renderText({
-        x <- db[input$variable]
-        if (is.factor(x)) {
-            paste("<b>Levels:</b> ", paste(levels(x), collapse = ", "))
-        } else {
 
-            stats <- c(
-                "Min" = min(x, na.rm = TRUE), 
-                "Median" = median(x, na.rm = TRUE), 
-                "Mean" = mean(x, na.rm = TRUE), 
-                "Max" = max(x, na.rm = TRUE)
-            )
-            
-            x <- data.frame("Measure" = names(stats), "Value" = stats)
-            
-            hwrite(m, border = 0, cellpadding = 5)
-        }
-    })
 })
