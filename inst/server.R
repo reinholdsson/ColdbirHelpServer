@@ -49,11 +49,12 @@ shinyServer(function(input, output) {
                 "Median" = median(x, na.rm = TRUE), 
                 "Mean" = mean(x, na.rm = TRUE), 
                 "Max" = max(x, na.rm = TRUE),
-                "Sd" = sd(x, na.rm = TRUE)
+                "Sd" = sd(x, na.rm = TRUE),
+                "NA's" = length(x[is.na(x)])
             )
             x <- data.frame("Measure" = names(stats), "Value" = stats)
         }
-        gvisTable(x, options = list(width = "100%", page = "enable"))
+        gvisTable(x, options = list(width = "100%", page = "enable", height = "300px"))
     })
     
     output$charts <- renderPlot({
@@ -63,10 +64,11 @@ shinyServer(function(input, output) {
         if (is.factor(x)) {
             x <- table(x)
             x <- as.data.frame(x)
-            x <- x[with(x, order(-Freq)), ]
-            x <- head(x, 10)
+            #x <- x[with(x, order(-Freq)), ]
+            #x <- head(x, 10)
             
-            p <- ggplot(x) + geom_bar(aes(x = reorder(x, Freq), y = Freq), fill = "lightblue") + coord_flip() + labs(title = "Frequency (top 10)")
+            #p <- ggplot(x) + geom_point(aes(x = reorder(x, Freq), y = Freq)) + labs(title = "Frequency")
+            p <- ggplot(x) + geom_point(aes(x = x, y = Freq)) + labs(title = "Frequency")
         } else {
             
             # Sample for large vectors
