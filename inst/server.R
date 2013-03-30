@@ -7,15 +7,21 @@ require(googleVis)
 shinyServer(function(input, output) {
     
     variable <- reactive({
-
+        
+        # TODO: Improve!
+        
         if(is.null(input$dims)) {
             i <- 1
         } else {
             i <- as.integer(input$dims)
         }
         
-        sel <- d[[input$variable]][[i]]
-        
+        if (identical(d[[input$variable]], character(0))) {
+            sel <- d[[input$variable]]
+        } else {
+            sel <- d[[input$variable]][[i]]
+        }
+
         db[input$variable, sel]
     })
     
@@ -68,7 +74,7 @@ shinyServer(function(input, output) {
             #x <- head(x, 10)
             
             #p <- ggplot(x) + geom_point(aes(x = reorder(x, Freq), y = Freq)) + labs(title = "Frequency")
-            p <- ggplot(x) + geom_point(aes(x = x, y = Freq)) + labs(title = "Frequency")
+            p <- ggplot(x) + geom_point(aes(x = x, y = Freq)) + coord_flip() + labs(title = "Frequency")
         } else {
             
             # Sample for large vectors
