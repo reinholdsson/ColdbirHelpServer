@@ -1,4 +1,11 @@
-require(rHighcharts)
+require(shiny)
+require(Coldbir)
+require(ColdbirHelpServer)
+require(markdown)
+require(data.table)
+require(ggplot2)
+require(ggthemes)
+require(googleVis)
 
 # Connect to database
 db <- cdb(.help_args$path, type = "f")

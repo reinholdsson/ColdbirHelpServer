@@ -1,8 +1,3 @@
-require(markdown)
-require(data.table)
-require(ggplot2)
-require(ggthemes)
-require(googleVis)
 
 shinyServer(function(input, output) {
     
