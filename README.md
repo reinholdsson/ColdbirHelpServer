@@ -1,6 +1,6 @@
 # Coldbir Help Server
 
-To be used with the Coldbir cdb class.
+To be used with the [Coldbir](https://github.com/SthlmR/Coldbir) package (>= v0.3).
 
 E.g:
 
@@ -19,5 +19,5 @@ E.g:
     # Show help
     ?a
 
-And then it starts up a shiny server and shows an interactive page showing documentation and other information available in the database. 
+And then it starts up a [Shiny](http://www.rstudio.com/shiny/) server and shows an interactive page showing documentation and other information available in the database. 
 For an example, see: [http://glimmer.rstudio.com/reinholdsson/help-app-demo/](http://glimmer.rstudio.com/reinholdsson/help-app-demo/).
