@@ -14,7 +14,7 @@ shinyUI(bootstrapPage(
 
     includeHTML("www/js/tools.js"),
     custom_css("Coldbir"),    
-
+    div(class = "path", (get_path(.CDB))),
         tabsetPanel(
             tabPanel("Variables",
                      
@@ -29,18 +29,19 @@ shinyUI(bootstrapPage(
                     ),
 
                     div(class="span4",
+                        
                          plotOutput("charts", height = "250px", width = "300px"),
                          uiOutput("dimension"),
-                         downloadButton('downloadData', "Download Summary Statistics"),
-                         htmlOutput("table")
+                         tableOutput("table"),
+                        HTML("<i>Table only shows up to ten rows.</i>"),
+                        downloadButton('downloadData', "Download Summary Statistics")
+                        
                     )
                 )
             ),
             tabPanel("Database",
-                     div(class = "span3",
-                         HTML(paste("<b>Coldbir Explorer</b>"), get_path(.CDB))
-                     )
+                     HTML("Database information:"),
+                     tableOutput("db_stats")
             )
-        
     )
 ))

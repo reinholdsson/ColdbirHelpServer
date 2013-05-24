@@ -11,6 +11,7 @@ shinyServer(function(input, output) {
     if (is.factor(x)) {
       x <- summary(x)
       x <- data.frame("Variable" = names(x), "N" = x)
+      x <- x[order(-x$N), ]
     } else {
       stats <- c(
         "N" = length(x),
@@ -72,8 +73,39 @@ shinyServer(function(input, output) {
     }
   )
   
-  output$table <- renderGvis({
-    gvisTable(summaryData(), options = list(width = "300px", page = "enable", height = "300px"))
-  })
+  output$table <- renderTable({
+    head(summaryData(), 10)
+  }, include.rownames = F)
 
+  output$db_stats <- renderTable({
+      
+      info <- file.info(get_path(.CDB))
+      data.frame(
+        key = c(
+            "path",
+            "size",
+            "mode",
+            "mtime",
+            "ctime",
+            "atime",
+            "user",
+            "variables", 
+            "variables (all files)",
+            "unique dimensions"
+        ),
+        value = c(
+            get_path(.CDB),
+            info$size,
+            info$mode,
+            as.character(info$mtime),
+            as.character(info$ctime),
+            as.character(info$atime),
+            info$uname,
+            length(.UNIQUE_VARIABLES), 
+            nrow(.VARIABLES),
+            length(unique(.VARIABLES$dims_label))
+        )
+      )
+  }, include.rownames = F, include.colnames = F)
+  
 })

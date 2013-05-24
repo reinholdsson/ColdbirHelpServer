@@ -61,7 +61,14 @@ a {
 #downloadData { 
     display: inline-block; 
     width: 270px;
-    margin-bottom: -40px;
+}
+
+.path { 
+    font-size: 0.9em;
+    font-style: italic;
+    text-transform: uppercase;
+    font-weight: 300;
+    float: right;
 }
 
 .nav {
