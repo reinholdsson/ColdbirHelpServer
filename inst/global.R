@@ -6,8 +6,8 @@ library(googleVis)
 require(ggthemes)
 require(markdown)
 
-#.CDB <- cdb(.help_args$path, type = "f")
-.CDB <- cdb("~/Desktop/testdb/", type = "f")
+.CDB <- cdb(.help_args$path, type = "f")
+#.CDB <- cdb("~/Desktop/testdb/", type = "f")
 
 .VARIABLES <- get_vars(.CDB, dims = T)
 .VARIABLES[ , dims_label := as.character(dims)]
