@@ -16,13 +16,13 @@ require(markdown)
 .UNIQUE_VARIABLES <- unique(.VARIABLES$variable)
 
 # Add variable names from documentation
-col <- "title" # title name in documentation
+#col <- "title" # title name in documentation
 v_names <- sapply(.UNIQUE_VARIABLES, function(x) {
-  title <- tryCatch(get_doc(.CDB, x)[[col]], error = function(e) NULL)
+  title <- tryCatch(get_doc(.CDB, x)[[1]], error = function(e) NULL)
   if (is.null(title)) {
     title <- x
   } else {
-    title <- paste(title, " (", x, ")", sep = "")
+    title <- paste0(x, ": ", title)
   }
   return(title)
 })
