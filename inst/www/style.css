@@ -1,10 +1,4 @@
 
-/*
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-*/
-
 body {
     margin:1cm;
 	padding: 0;
@@ -53,4 +47,28 @@ ul, ol {
 a {
 	text-decoration: none;
 	color: #5BA689;
+}
+
+#variable {
+    width: 300px;
+}
+    
+#dimension { 
+    display: inline-block; 
+    width: 150px;
+}
+
+#downloadData { 
+    display: inline-block; 
+    width: 270px;
+    margin-bottom: -40px;
+}
+
+.nav {
+    margin-top: -40px;
+}
+
+.row {
+    margin-top: -40px;
+    margin-left: 0px;
 }

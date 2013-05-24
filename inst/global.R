@@ -1,34 +1,32 @@
-require(shiny)
-require(Coldbir)
-require(ColdbirHelpServer)
-require(markdown)
-require(data.table)
-require(ggplot2)
+library(reshape2)
+library(ggplot2)
+library(data.table)
+library(Coldbir)
+library(googleVis)
 require(ggthemes)
-require(googleVis)
+require(markdown)
 
-# Connect to database
-db <- cdb(.help_args$path, type = "f")
+#.CDB <- cdb(.help_args$path, type = "f")
+.CDB <- cdb("~/Desktop/testdb/", type = "f")
 
-# Fetch all variables
-v <- get_vars(db)
+.VARIABLES <- get_vars(.CDB, dims = T)
+.VARIABLES[ , dims_label := as.character(dims)]
+.VARIABLES$id <- rownames(.VARIABLES)
 
-col <- "title"  # title name in documentation
-v_names <- sapply(v, function(x) {
-    title <- tryCatch(get_doc(db, x)[[col]], error = function(e) NULL)
-    if (is.null(title)) {
-        title <- x 
-    } else {
-        title <- paste(title, " (", x, ")", sep = "")
-    }
-    return(title)
+.UNIQUE_VARIABLES <- unique(.VARIABLES$variable)
+
+# Add variable names from documentation
+col <- "title" # title name in documentation
+v_names <- sapply(.UNIQUE_VARIABLES, function(x) {
+  title <- tryCatch(get_doc(.CDB, x)[[col]], error = function(e) NULL)
+  if (is.null(title)) {
+    title <- x
+  } else {
+    title <- paste(title, " (", x, ")", sep = "")
+  }
+  return(title)
 })
 
 # Choices for selectInput input.variable
-sel_input_v <- setNames(as.list(v), v_names)
-
-# Dims
-d <- sapply(v, function(x) {
-    get_dims(db, x)
-})
-# d[["dim1"]][[2]]
+.UNIQUE_VARIABLES <- setNames(as.list(.UNIQUE_VARIABLES), v_names)
+v_names <- NULL

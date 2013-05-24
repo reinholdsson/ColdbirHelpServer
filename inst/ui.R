@@ -1,42 +1,46 @@
 
 # Custom CSS
 custom_css <- function(title, window_title = title){
-    tagList(
-        tags$head(
-            tags$title(window_title),
-            tags$link(rel="stylesheet", type="text/css",
-                      href="style.css"),
-            tags$style(type="text/css", '#variable { width:500px; }')
-        )
+  tagList(
+    tags$head(
+      tags$title(window_title),
+      tags$link(rel="stylesheet", type="text/css",
+                href="style.css")
     )
+  )
 }
 
-# Interface
 shinyUI(bootstrapPage(
 
-    # Include javascript files
     includeHTML("www/js/tools.js"),
-    
-    # CSS styling
-    custom_css("Coldbir Help Server"),
+    custom_css("Coldbir"),    
 
-    # Input
-    selectInput("variable", label = "", choices = sel_input_v, selected = NULL, multiple = FALSE),
-    
-    div(class="row",
-        div(class="span2", 
-            uiOutput("dims")
-        ),
-        div(class="span8", 
-            htmlOutput("docs")
-        ),
-        div(class="span5",
-            
-            conditionalPanel(
-                condition = "input.dims > 0",
-                plotOutput("charts", height = "300px"),
-                htmlOutput("table")
+        tabsetPanel(
+            tabPanel("Variables",
+                     
+                div(class="row",
+                    div(class="span7", 
+                        selectInput(
+                            inputId = "variable",
+                            label = "",
+                            choices = .UNIQUE_VARIABLES
+                        ),
+                        htmlOutput("docs")
+                    ),
+
+                    div(class="span4",
+                         plotOutput("charts", height = "250px", width = "300px"),
+                         uiOutput("dimension"),
+                         downloadButton('downloadData', "Download Summary Statistics"),
+                         htmlOutput("table")
+                    )
+                )
+            ),
+            tabPanel("Database",
+                     div(class = "span3",
+                         HTML(paste("<b>Coldbir Explorer</b>"), get_path(.CDB))
+                     )
             )
-        )
+        
     )
 ))
