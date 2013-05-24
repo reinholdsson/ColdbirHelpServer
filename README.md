@@ -1,5 +1,7 @@
 # Coldbir Help Server
 
+![](https://dl.dropboxusercontent.com/u/2904328/ColdbirHelpServer.png)
+
 To be used with the [Coldbir](https://github.com/SthlmR/Coldbir) package (>= v0.3).
 
 E.g:
