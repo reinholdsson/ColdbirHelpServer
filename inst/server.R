@@ -88,7 +88,6 @@ shinyServer(function(input, output) {
             "mtime",
             "ctime",
             "atime",
-            "user",
             "variables", 
             "variables (all files)",
             "unique dimensions"
@@ -100,7 +99,6 @@ shinyServer(function(input, output) {
             as.character(info$mtime),
             as.character(info$ctime),
             as.character(info$atime),
-            info$uname,
             length(.UNIQUE_VARIABLES), 
             nrow(.VARIABLES),
             length(unique(.VARIABLES$dims_label))
